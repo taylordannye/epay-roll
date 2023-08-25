@@ -15,7 +15,7 @@
     @include('utilities.auth.header')
     <main class="auth-container">
         <div class="auth-wrapper">
-            <form action="#" method="POST" autocomplete="off" class="singin" id="signin">
+            <form action="#" method="POST" autocomplete="off" class="singin" id="authentication">
                 <div class="auth-heading">
                     <h1>Welcome Back!</h1>
                 </div>
@@ -23,13 +23,24 @@
                     <span class="line"></span>Continue with email & password<span class="line"></span>
                 </div>
                 <div class="input-group">
-                    <input type="email" id="email" name="email" placeholder="example@gmail.com" @required(true)>
+                    <input type="email" id="email" name="email" placeholder="example@gmail.com"
+                        @required(true)>
                 </div>
                 <div class="input-group">
-                    <input type="password" id="password" name="password" placeholder="***************" @required(true)>
+                    <input type="password" id="password" name="password" placeholder="***************"
+                        @required(true)>
                 </div>
                 <div class="btn-group">
-                    <button type="submit" class="submit-btn">Signin to your account</button>
+                    <button type="submit" id="submit" class="submit-btn">Sign
+                        in to your account</button>
+                    <div id="loader" class="loader-wrapper">
+                        <!-- Ripple Loader -->
+                        <div class="ripple-loader">
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="auth-membership-status">
                     <p>Don't have a {{ config('app.name') }} account? <a href="{{ route('signup') }}">Sign-up</a></p>
@@ -40,6 +51,7 @@
             </form>
         </div>
     </main>
+    <script src="{{ asset('storage/utilities/auth/js/processing.js') }}"></script>
 </body>
 
 </html>
