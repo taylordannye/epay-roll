@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\randrPasswordController;
+use App\Http\Controllers\signinController;
+use App\Http\Controllers\signupController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +19,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/sign-up', [signupController::class, 'showSignupPage'])->name('signup');
+Route::get('sign-in', [signinController::class, 'showSigninPage'])->name('signin');
+Route::get('/forgot-password', [randrPasswordController::class, 'showForgotPasswordPage'])->name('forgot-password');
