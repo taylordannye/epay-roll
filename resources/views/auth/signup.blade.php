@@ -16,12 +16,13 @@
     <main class="auth-container">
         <div class="auth-wrapper">
             <form action="#" method="POST" autocomplete="off" class="onboarding" id="authentication">
+                @csrf
                 <div class="auth-heading">
                     <h1>Create your account</h1>
                 </div>
-                <button type="button" class="o2auth-wrapper">
+                <button type="button" class="o2auth-wrapper" id="google-authentication">
                     <img class="o2auth-img"
-                        src="{{ asset('storage/assets/images/02auth/29b6600agh288c2748374jjfd8439843.png') }}"
+                        src="{{ asset('storage/assets/images/02auth/0stabk39m4jm5xbznqmp.png') }}"
                         alt="Google">
                     <div class="text">Continue with Google</div>
                 </button>
@@ -48,7 +49,34 @@
             </form>
         </div>
     </main>
-    <script src="{{ asset('storage/utilities/auth/js/processing.js') }}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const googleButton = document.getElementById("google-authentication");
+            let originalButtonContent = googleButton.innerHTML; // Store the original button content
+            googleButton.addEventListener("click", function(event) {
+                event.preventDefault(); // Prevent the default navigation behavior
+                // Change button to loader with a message
+                googleButton.innerHTML = '<div class="loader"></div>&nbsp; Redirecting to O2auth server';
+                setTimeout(function() {
+                    // Check if the user is online before navigation
+                    if (navigator.onLine) {
+                        window.location.href = "sign-in";
+                    } else {
+                        // Display an error message
+                        googleButton.innerHTML =
+                            '<i class="icofont-link-broken"></i>&nbsp; Connection died, click to retry.';
+
+                        // Restore the original button content after 4 seconds
+                        setTimeout(function() {
+                            googleButton.innerHTML = originalButtonContent;
+                        }, 30000); // 30 seconds
+                    }
+                }, 5000); // 5 seconds
+            });
+        });
+    </script>
+
+    <script src="{{ asset('storage/utilities/auth/js/6urye68tv3k0oo3n20sd.js') }}"></script>
 </body>
 
 </html>

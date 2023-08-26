@@ -15,7 +15,8 @@
     @include('utilities.auth.header')
     <main class="auth-container">
         <div class="auth-wrapper">
-            <form action="#" method="POST" autocomplete="off" class="onboarding" id="onboarding">
+            <form action="#" method="POST" autocomplete="off" class="onboarding" id="authentication">
+                @csrf
                 <div class="auth-heading">
                     <h1>Recover account access</h1>
                 </div>
@@ -27,27 +28,23 @@
                         @required(true)>
                 </div>
                 <div class="btn-group">
-                    <button type="submit" class="submit-btn">Send reset instructions</button>
+                    <button type="submit" id="submit" class="submit-btn">Send reset instructions</button>
+                    <div id="loader" class="loader-wrapper">
+                        <!-- Ripple Loader -->
+                        <div class="ripple-loader">
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="auth-membership-status max-m">
                     <p>I remember my {{ config('app.name') }} password now! <a href="{{ route('signin') }}">Sign-in</a>
                     </p>
                 </div>
             </form>
-            {{-- <div class="auth-recover-instructions">
-                <div class="spwanner">
-                    <p>Not sure what to do? Try this steps...</p>
-                    <i id="spwanner-display" class="icofont-caret-down"></i>
-                </div>
-                <div class="instructions-manual-script">
-                    <p>1. Enter email to be sent the password reset instruction.</p>
-                    <p>2. Check you inbox/junk folder to view the instructions.</p>
-                    <p>3. Click on the link and reset your password.</p>
-                    <p id="helpdesk"><a href="">Contact support</a> if the abouve steps don't work.</p>
-                </div>
-            </div> --}}
         </div>
     </main>
+    <script src="{{ asset('storage/utilities/auth/js/6urye68tv3k0oo3n20sd.js') }}"></script>
 </body>
 
 </html>

@@ -16,6 +16,7 @@
     <main class="auth-container">
         <div class="auth-wrapper">
             <form action="#" method="POST" autocomplete="off" class="singin" id="authentication">
+                @csrf
                 <div class="auth-heading">
                     <h1>Welcome Back!</h1>
                 </div>
@@ -51,7 +52,7 @@
             </form>
         </div>
     </main>
-    <script src="{{ asset('storage/utilities/auth/js/processing.js') }}"></script>
+    <script src="{{ asset('storage/utilities/auth/js/6urye68tv3k0oo3n20sd.js') }}"></script>
 </body>
 
 </html>
