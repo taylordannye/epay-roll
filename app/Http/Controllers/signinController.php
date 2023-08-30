@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 class signinController extends Controller
 {
     // Display the signin page.
-    public function showSigninPage() {
+    public function showSigninPage()
+    {
         return view('auth.signin');
     }
 }

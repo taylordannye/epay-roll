@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,11 +29,11 @@
                     <span class="line"></span>Or continue with email<span class="line"></span>
                 </div>
                 <div class="input-group">
-                    <input type="email" id="email" name="email" placeholder="example@gmail.com"
+                    <input type="text" id="email" name="email" placeholder="example@gmail.com"
                         @required(true)>
                 </div>
                 <div class="btn-group">
-                    <button type="submit" id="submit" class="submit-btn">Get Signup Authorization</button>
+                    <button type="submit" id="submit" class="submit-btn">Continue</button>
                     <div id="loader" class="loader-wrapper">
                         <!-- Ripple Loader -->
                         <div class="ripple-loader">
