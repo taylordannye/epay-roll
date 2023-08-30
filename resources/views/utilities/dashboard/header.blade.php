@@ -34,9 +34,17 @@
             <div class="line"></div>
             <div class="line"></div>
         </div>
-
+        <div class="message message-hyperlink m-dash">
+            <img src="{{ asset('storage/utilities/components/auth/lsbhl0ji40fb6rd36pcb.png') }}" id="usermessage utilizer-img" alt="messages">
+        </div>
+        <div class="user-profile profile-hyperlink m-dash">
+            <img src="{{ asset('storage/utilities/components/auth/5dcyql4mvwahfpcxw8gr.png') }}" id="userProfile utilizer-img" alt="profile">
+        </div>
+        <div class="user-logout logout-hyperlink m-dash">
+            <img src="{{ asset('storage/utilities/components/auth/0g8ty08qpsm8sjjslgwz.png') }}" alt="logout" id="logout utilizer-img">
+        </div>
         <button class="btn lang-btn" id="lang-btn"><img
                 src="{{ asset('storage/utilities/components/auth/2shy6ikkqb31nxrcrvck.png') }}"
-                alt="Translator" width="16px">&nbsp;{{ app()->getLocale() }}</button>
+                alt="Translator" width="18px">&nbsp;{{ app()->getLocale() }}</button>
     </div>
 </header>
