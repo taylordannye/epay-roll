@@ -4,11 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Let's help you recover your password - {{ config('app.name') }}</title>
+    <title>Change password and recover account access! - {{ config('app.name') }}</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('storage/utilities/style.css?v=1.0') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('storage/utilities/components/header.css?v=1.0') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('storage/utilities/auth/authorization.css?v=1.0') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('storage/utilities/auth/utilities.css?v=1.0') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('storage/utilities/auth/authorization.css?v=1.0') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('storage/assets/fonts/icofont/icofont.min.css?v=1.0') }}">
 </head>
 
@@ -16,23 +16,24 @@
     @include('utilities.auth.header')
     <main class="auth-container">
         <div class="auth-wrapper">
-            <form action="{{ route('forgot-password.post') }}" method="POST" autocomplete="off" class="onboarding"
-                id="authentication">
+            <form action="#" method="POST" autocomplete="off" class="onboarding" id="authentication">
                 @include('auth.error&success.error')
                 @include('auth.error&success.success')
                 @csrf
-                <div class="auth-heading">
-                    <h1>Recover account access</h1>
-                </div>
+                <input type="text" name="token" hidden value="{{ $token }}">
                 <div class="divider-liner">
-                    <span class="line"></span>Enter email-id to reset password<span class="line"></span>
+                    <span class="line"></span>Enter a new password below<span class="line"></span>
                 </div>
                 <div class="input-group">
-                    <input type="email" id="email" name="email" placeholder="example@gmail.com"
-                        value="{{ old('email') }}" @required(true)>
+                    <input type="email" id="email" name="email" placeholder="example@gmail.com" value="{{ $email }}"
+                        @required(true) @disabled(true)>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" name="password" placeholder="Enter new password"
+                        @required(true)>
                 </div>
                 <div class="btn-group">
-                    <button type="submit" id="submit" class="submit-btn">Send reset instructions</button>
+                    <button type="submit" id="submit" class="submit-btn">Confirm changes</button>
                     <div id="loader" class="loader-wrapper">
                         <!-- Ripple Loader -->
                         <div class="ripple-loader">
@@ -42,7 +43,7 @@
                     </div>
                 </div>
                 <div class="auth-membership-status max-m">
-                    <p>I remember my {{ config('app.name') }} password now! <a href="{{ route('signin') }}">Sign-in</a>
+                    <p>Don't wan't to reset your password anymore? <a href="{{ route('cancel-reset') }}">Cancel process</a>
                     </p>
                 </div>
             </form>

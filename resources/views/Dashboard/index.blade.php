@@ -11,10 +11,16 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('storage/assets/fonts/icofont/icofont.min.css?v=1.0') }}">
     </head>
     <body class="antialiased">
-        {{-- @include('utilities.dashboard.announcement') --}}
         @include('utilities.dashboard.header')
         <main class="full-grid-flow">
-            <div class="navigation-panel-flow"></div>
+            <div class="navigation-panel-flow">
+                <div class="help-and-support">
+                    <button><img src="{{ asset('storage/utilities/components/auth/k41ssedgxyu0q1qxhb3d.svg') }}" alt="info">Help & Support</button>
+                </div>
+                <div class="copyright">
+                    <p>&copy; {{ config('app.name') }} - <?php echo date("Y") ?> - all rights reserved.</p>
+                </div>
+            </div>
             <div class="main-preview-screen"></div>
         </main>
     </body>

@@ -10,5 +10,6 @@
     </head>
     <body class="antialiased">
         @include('utilities.header')
+        
     </body>
 </html>

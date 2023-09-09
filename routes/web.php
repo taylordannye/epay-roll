@@ -27,3 +27,7 @@ Route::get('/verification-required', [verificationController::class, 'showVerifi
 Route::get('/verification-required/resend', [verificationController::class, 'resendVerificationCode'])->name('resend-verification');
 Route::get('sign-in', [signinController::class, 'showSigninPage'])->name('signin');
 Route::get('/forgot-password', [randrPasswordController::class, 'showForgotPasswordPage'])->name('forgot-password');
+Route::post('/forgot-password', [randrPasswordController::class, 'sendPasswordResetInstructions'])->name('forgot-password.post');
+Route::get('/forgot-password/reset', [randrPasswordController::class, 'showResetPasswordPage'])->name('reset-password');
+Route::post('/forgot-password/reset', [randrPasswordController::class, 'resetPasswordHandler'])->name('reset-password.post');
+Route::get('/forgot-password/reset/cancel', [randrPasswordController::class, 'cancelPasswordReset'])->name('cancel-reset');

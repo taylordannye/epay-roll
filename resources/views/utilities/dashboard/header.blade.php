@@ -36,12 +36,15 @@
         </div>
         <div class="message message-hyperlink m-dash">
             <img src="{{ asset('storage/utilities/components/auth/lsbhl0ji40fb6rd36pcb.png') }}" id="usermessage utilizer-img" alt="messages">
+            <p>Messages</p>
         </div>
         <div class="user-profile profile-hyperlink m-dash">
             <img src="{{ asset('storage/utilities/components/auth/5dcyql4mvwahfpcxw8gr.png') }}" id="userProfile utilizer-img" alt="profile">
+            <p>Profile</p>
         </div>
         <div class="user-logout logout-hyperlink m-dash">
             <img src="{{ asset('storage/utilities/components/auth/0g8ty08qpsm8sjjslgwz.png') }}" alt="logout" id="logout utilizer-img">
+            <p>Signout</p>
         </div>
         <button class="btn lang-btn" id="lang-btn"><img
                 src="{{ asset('storage/utilities/components/auth/2shy6ikkqb31nxrcrvck.png') }}"
