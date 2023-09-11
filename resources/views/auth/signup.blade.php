@@ -14,7 +14,7 @@
     @include('utilities.auth.header')
     <main class="auth-container">
         <div class="auth-wrapper">
-            <form action="#" method="POST" autocomplete="off" class="onboarding" id="authentication">
+            <form action="{{ route }}" method="POST" autocomplete="off" class="onboarding" id="authentication">
                 @csrf
                 <div class="auth-heading">
                     <h1>Create your account</h1>

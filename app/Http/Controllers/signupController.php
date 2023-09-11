@@ -10,4 +10,13 @@ class signupController extends Controller
     {
         return view('auth.signup');
     }
+
+    public function authorizeUserSignup(Request $request) {
+        $request->validate([
+            'email' => [
+                'required',
+                'email',
+            ],
+        ]);
+    }
 }
