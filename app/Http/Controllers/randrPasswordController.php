@@ -140,14 +140,29 @@ class randrPasswordController extends Controller
 
         $user->password = Hash::make($request->input('password'));
         $user->save();
-        // Delete the used password reset token
-        $passwordResetToken->delete();
+
         try {
-            Mail::to($user->email)->send(new passwordResetSuccessful($user));
+            // Check DNS records to ensure the recipient's email domain is valid
+            $recipientEmail = $user->email;
+            $recipientDomain = substr(strrchr($recipientEmail, "@"), 1);
+
+            if (!checkdnsrr($recipientDomain, 'MX')) {
+                // Invalid domain, handle the error
+                $errorMessage = 'There is an issue with the recipient\'s email domain. Please try again later.';
+                return redirect()->back()->with('error', $errorMessage);
+            }
+
+            // If DNS check is successful, send the email
+            Mail::to($recipientEmail)->send(new PasswordResetSuccessful($user));
         } catch (\Exception $e) {
-            $errorMessage = 'There was an issue sending the password reset instructions. Please try again later. Or try checking your network connection and try again.';
+            // Handle other exceptions (e.g., mail server issues)
+            $errorMessage = 'There was an issue sending password reset confirmation email. Please try again later.';
             return redirect()->back()->with('error', $errorMessage);
         }
+
+
+        // Delete the used password reset token
+        $passwordResetToken->delete();
 
         return redirect(route('signin'))->with('success', 'Password reset successful. You can now sign in with your new password.');
     }
