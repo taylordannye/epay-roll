@@ -7,15 +7,19 @@
     <title>We're glad to see you back! - {{ config('app.name') }}</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('storage/utilities/style.css?v=1.0') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('storage/utilities/components/header.css?v=1.0') }}">
-    <link rel="stylesheet" href="{{ asset('storage/utilities/auth/authorization.css?v=1.0') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('storage/utilities/auth/authorization.css?v=1.0') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('storage/utilities/auth/utilities.css?v=1.0') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('storage/assets/fonts/icofont/icofont.min.css?v=1.0') }}">
 </head>
 
 <body class="antialiased">
     @include('utilities.auth.header')
-    <main class="auth-container">
+    @include('utilities.loader')
+    <main class="auth-container contents">
         <div class="auth-wrapper">
             <form action="#" method="POST" autocomplete="off" class="singin" id="authentication">
+                @include('auth.error&success.error')
+                @include('auth.error&success.success')
                 @csrf
                 <div class="auth-heading">
                     <h1>Welcome Back!</h1>

@@ -7,10 +7,9 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\passwordResetToken;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\passwordResetInstruction;
+use App\Mail\passwordResetSuccessful;
 use App\Mail\resetPasswordInstructions;
 
 class randrPasswordController extends Controller
@@ -39,16 +38,16 @@ class randrPasswordController extends Controller
         // Check if an existing token is more than 4 hours old and delete it
         if ($existingToken) {
             $tokenCreatedAt = Carbon::parse($existingToken->created_at);
-            $fourHoursAgo = now()->subHours(1);
+            $fourHoursAgo = now()->subHours(4);
 
             if ($tokenCreatedAt->lte($fourHoursAgo)) {
                 $existingToken->delete();
             } else {
-                return redirect(route('forgot-password'))->with('error', "There's a current operation in session, please use the previous link to reset your password or wait for 1 hours to reset it again.");
+                return redirect(route('forgot-password'))->with('error', "There's a current operation in session, please use the previous link to reset your password or wait for 4 hours to reset it again.");
             }
         }
 
-        $token = Str::random(64);
+        $token = base64_encode(Str::random(40));
 
         $passwordResetToken = new PasswordResetToken();
         $passwordResetToken->email = $request->email;
@@ -65,16 +64,16 @@ class randrPasswordController extends Controller
             'time' => $time,
         ];
 
-        // try {
-        //     Mail::to($request->email)->send(new resetPasswordInstructions($mailData));
-        // } catch (\Exception $e) {
-        //     $errorMessage = 'There was an issue sending the password reset instructions. Please try again later. Or try checking your network connection and try again.';
-        //     return redirect()->back()->with('error', $errorMessage);
-        // }
+        try {
+            Mail::to($request->email)->send(new resetPasswordInstructions($mailData));
+        } catch (\Exception $e) {
+            $errorMessage = 'There was an issue sending the password reset instructions. Please try again later. Or try checking your network connection and try again.';
+            return redirect()->back()->with('error', $errorMessage);
+        }
 
-        echo ($actionLink);
+        // echo ($actionLink);
 
-        // return back()->with('success', "An email with the password reset instructions has been sent to your email address. Please check your Spams/Junk folder if not found in inbox.");
+        return back()->with('success', "An email with the password reset instructions has been sent to your email address. Please check your Spams/Junk folder if not found in inbox.");
     }
 
     public function showResetPasswordPage(Request $request)
@@ -86,15 +85,27 @@ class randrPasswordController extends Controller
         $passwordResetToken = PasswordResetToken::where('email', $email)->first();
 
         if (!$passwordResetToken || $passwordResetToken->token !== $token) {
-            return redirect(route('forgot-password'))->with('error', 'The password reset link is invalid or has expired. Please make sure you are using the correct link and try again. If the link has expired, you can request a new one.');
+            return redirect(route('forgot-password'))->with('error', 'Oops, it seems there\'s an issue with the URL you\'re using. Contact technical support if the issue persists.');
+        }
+
+        // Convert the created_at attribute to a Carbon instance
+        $createdAt = \Carbon\Carbon::parse($passwordResetToken->created_at);
+        $now = now();
+
+        // Check if the token is more than 4 hours old
+        $tokenAgeInHours = $createdAt->diffInHours($now);
+
+        if ($tokenAgeInHours > 4) {
+            return redirect(route('forgot-password'))->with('error', 'The password reset link has expired. Please request a new one.');
         }
 
         return view('auth.reset-password', ['email' => $email, 'token' => $token]);
     }
 
+
+
     public function resetPasswordHandler(Request $request)
     {
-        // Validate the form data
         $request->validate([
             'email' => 'required|email',
             'token' => 'required',
@@ -104,33 +115,55 @@ class randrPasswordController extends Controller
             ],
         ]);
 
-        // Find the user by email
         $user = User::where('email', $request->input('email'))->first();
 
         if (!$user) {
             return redirect(route('forgot-password'))->with('error', 'User not found.');
         }
 
-        // Verify the token
         $passwordResetToken = PasswordResetToken::where('email', $user->email)->first();
 
         if (!$passwordResetToken || $passwordResetToken->token !== $request->input('token')) {
-            return redirect(route('forgot-password'))->with('error', 'he password reset link is invalid or has expired. Please make sure you are using the correct link and try again. If the link has expired, you can request a new one.');
+            return redirect(route('forgot-password'))->with('error', 'Couldn\'t update your password at this time. Please try again later.');
         }
 
-        // Update the user's password
+        // Convert the created_at attribute to a Carbon instance
+        $createdAt = \Carbon\Carbon::parse($passwordResetToken->created_at);
+        $now = now();
+
+        // Check if the token is more than 4 hours old
+        $tokenAgeInHours = $createdAt->diffInHours($now);
+
+        if ($tokenAgeInHours > 4) {
+            return redirect(route('forgot-password'))->with('error', 'The password reset link has expired. Please request a new one.');
+        }
+
         $user->password = Hash::make($request->input('password'));
         $user->save();
-
         // Delete the used password reset token
         $passwordResetToken->delete();
+        try {
+            Mail::to($user->email)->send(new passwordResetSuccessful($user));
+        } catch (\Exception $e) {
+            $errorMessage = 'There was an issue sending the password reset instructions. Please try again later. Or try checking your network connection and try again.';
+            return redirect()->back()->with('error', $errorMessage);
+        }
 
-        // Redirect to the login page with a success message
-        return redirect(route('signin'))->with('success', 'Password reset successful. You can now log in with your new password.');
+        return redirect(route('signin'))->with('success', 'Password reset successful. You can now sign in with your new password.');
     }
 
-    public function cancelPasswordReset()
+
+    public function cancelPasswordReset(Request $request)
     {
-        echo ('You have successfully cancelled the password reset process, please return to the homepage.');
+        // Check if the token is valid
+        $token = $request->input('token');
+        $email = $request->input('email');
+        $passwordResetToken = PasswordResetToken::where('email', $email)->first();
+        if ($passwordResetToken && $passwordResetToken->token === $token) {
+            // Token is valid, delete it
+            $passwordResetToken->delete();
+            return redirect(route('signin'))->with('success', 'Password reset request has been canceled. Feel free to reset your password anytime.');
+        }
+        return redirect(route('forgot-password'))->with('error', 'Invalid or expired cancel link.');
     }
 }
